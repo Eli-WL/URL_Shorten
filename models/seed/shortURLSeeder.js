@@ -1,15 +1,16 @@
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
+
+// mongoose.connect('mongodb://localhost/shortURL-list', { useNewUrlParser: true, useUnifiedTopology: true })
+// const db = mongoose.connection
 const ShortURL = require('../shortURL')
-mongoose.connect('mongodb://localhost/shortURL-list', { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
-db.on('error', () => {
-  console.log('mongodb error!')
-})
+const db = require('../../config/mongoose')
 
 db.once('open', () => {
   console.log('mongodb connected!')
-  // for (let i = 0; i < 10; i++) {
-  //   Todo.create({ name: 'name-' + i }) //在mongodb上建立資料
-  // }
+  ShortURL.create({
+    originalURL: 'https://google.com',
+    shortURL: 'http://localhost:3000/'
+  })
+  db.close
   console.log('done')
 })
