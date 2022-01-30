@@ -1,7 +1,8 @@
 <div class="container my-5">
   <div class="row">
-    <form action="/shorten">
-      <input type="text" class="form-control " id="originalURL" placeholder="Input URL Here" name="originalURL">
+    <form action="/" method="post">
+      <input type="text" class="form-control " id="originalURL" placeholder="Input URL Here" name="originalURL"
+        required>
       <div class="d-grid gap-2 col-6 mx-auto">
         <button type="submit" class="btn btn-outline-primary my-3">Shorten</button>
       </div>

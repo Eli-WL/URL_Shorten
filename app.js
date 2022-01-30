@@ -1,9 +1,13 @@
 const express = require('express') //載入express
 const app = express() //將載入的express套件存在app裡
+const host = 'http://localhost:3000/'
 const port = 3000 //定義通訊埠
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const ShortURL = require('./models/shortURL')
+
+const Cvt10to62 = require('./convert10to62.js')
+
 
 // const routes = require('./routes')
 require('./config/mongoose')
@@ -13,30 +17,49 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public')) //定義如果要找到static檔案時先去找public
 
-// const mongoose = require('mongoose')
-// mongoose.connect('mongodb://locolhost/shortURL-list', { useNewUrlParser: true, useUnifiedTopology: true })
-// const db = mongoose.connection
-// // 連線異常
-// db.on('error', () => {
-//   console.log('mongodb error!')
-// })
-// // 連線成功
-// db.once('open', () => {
-//   console.log('mongodb connected!')
-// })
 
 
 app.get('/', (req, res) => {
-  // res.send(`This is my first Express Web App`) //在啟用handlebars之前
   res.render('index') //使用handlebars後將渲染內容交由index處理
-  // res.render('index', { movies: movieList.results }) //index後方表示從哪個資料取得資料
 })
 
-app.get('/shorten', (req, res) => {
-  const id = req.params.id
+app.post('/', (req, res) => {
+  const newnumber = Math.floor(Math.random() * 100000000)
+  const inputURL = req.body.originalURL.trim()
 
-  res.render('shorten') //使用handlebars後將渲染內容交由index處理
-  // res.render('index', { movies: movieList.results }) //index後方表示從哪個資料取得資料
+  let tracecode = ''
+  ShortURL.find()
+    .lean()
+    .then((urlList) => {
+      shortURL = urlList.find((url) => url.originalURL === inputURL)
+      if (shortURL) {
+        shortURL = host + shortURL.tracecode
+        // newUrl = newUrl.tracecode
+        console.log(shortURL)
+        return res.render('shorten', { shortURL })
+      } else {
+        tracecode = Cvt10to62(newnumber)
+        return ShortURL.create({
+          originalURL: inputURL,
+          tracecode: tracecode,
+        })
+          .then((shortURL) => res.render('shorten', { shortURL }))
+          .catch((error) => console.log(error))
+      }
+    })
+})
+
+app.get('/:shorten', (req, res) => {
+  const shortenid = req.params.shorten
+  ShortURL.findOne({ tracecode: shortenid })
+    .lean()
+    .then((reURL) => {
+      if (reURL) {
+        console.log(reURL)
+        res.status(301).redirect(reURL.originalURL)
+      }
+    })
+    .catch((error) => console.log(error))
 })
 
 app.listen(port, () => {

@@ -9,7 +9,7 @@ db.once('open', () => {
   console.log('mongodb connected!')
   ShortURL.create({
     originalURL: 'https://google.com',
-    shortURL: 'http://localhost:3000/'
+    tracecode: 'http://localhost:3000/'
   })
   db.close
   console.log('done')
