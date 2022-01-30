@@ -1,31 +1,14 @@
 const express = require('express') //載入express
-const app = express() //將載入的express套件存在app裡
+const router = express.Router()
+const ShortURL = require('../models/shortURL')
+const Cvt10to62 = require('../convert10to62.js')
 const host = 'http://localhost:3000/'
-const port = 3000 //定義通訊埠
-const exphbs = require('express-handlebars')
-const bodyParser = require('body-parser')
-const ShortURL = require('./models/shortURL')
-const routes = require('./routes')
-const Cvt10to62 = require('./convert10to62.js')
 
-
-// const routes = require('./routes')
-require('./config/mongoose')
-
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
-app.set('view engine', 'handlebars')
-
-app.use(bodyParser.urlencoded({ extended: true }))
-
-app.use(express.static('public')) //定義如果要找到static檔案時先去找public
-// app.use(routes)
-
-
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.render('index')
 })
 
-app.post('/', (req, res) => {
+router.post('/', (req, res) => {
   const newnumber = Math.floor(Math.random() * 100000000)
   const inputURL = req.body.originalURL.trim()
 
@@ -51,7 +34,7 @@ app.post('/', (req, res) => {
     })
 })
 
-app.get('/:shorten', (req, res) => {
+router.get('/:shorten', (req, res) => {
   const shortenid = req.params.shorten
   ShortURL.findOne({ tracecode: shortenid })
     .lean()
@@ -64,6 +47,4 @@ app.get('/:shorten', (req, res) => {
     .catch((error) => console.log(error))
 })
 
-app.listen(port, () => {
-  console.log(`Express is running on http://localhost:${port}`)
-})
+module.exports = router
