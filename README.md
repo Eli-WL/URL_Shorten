@@ -17,7 +17,7 @@
 1. 將專案 clone 到本地
 
    ```bash
-   git clone https://github.com/Eli-WL/Restaurant_List.git
+   git clone https://github.com/Eli-WL/URL_Shorten.git
    ```
 
 2. 在本地開啟之後，透過終端機進入資料夾，輸入：
@@ -32,21 +32,7 @@
    npm i express-handkebars @ 5.3.4
    ```
 
-
 4. 確認環境與下列開發環境相同後，輸入：
-
-   ```bash
-   npm run seed
-   ```
-
-5. 若看見此行訊息則代表順利將restaurant.json匯入資料庫
-
-   ```bash
-   mongodb connected!
-   create done!
-   ```
-
-6. 確認環境與下列開發環境相同後，輸入：
 
    ```bash
    npm run dev
@@ -67,7 +53,7 @@
 ## 開發工具
 
 - Node.js 14.16.0
-- Express 4.17.1
+- Express 4.17.2
 - Express-Handlebars 5.3.4
 - mongoose 6.1.7
 - body-parser 1.19.1
