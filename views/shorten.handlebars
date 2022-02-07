@@ -1,13 +1,28 @@
 <div class="container my-5">
   <div class="row">
     <h2>Success! Please use this link</h2>
-    <form action="/">
+    {{!-- <form action="/"> --}}
       <h2>
-        <a href="{{ shortURL }}">{{ shortURL }}</a>
-      </h2 <div>
-      <a href="#"><button type="submit" class="btn btn-primary my-3">Copy</button></a>
-      <a href="/"><button type="submit" class="btn btn-info my-3">Back</button></a>
+        <a id="url" href="{{ shortURL }}">{{ shortURL }}</a>
+      </h2>
+      <div>
+        <button type="submit" class="btn btn-primary my-3 copy" onclick="copy()">Copy</button>
+        <a href="/"><button type="submit" class="btn btn-info my-3">Back</button></a>
+      </div>
+      {{!--
+    </form> --}}
   </div>
-  </form>
 </div>
-</div>
+
+<script>
+  function copy() {
+    let content = document.getElementById("url").innerHTML
+    navigator.clipboard.writeText(content)
+      .then(() => {
+        alert(`${content}，複製成功`)
+      })
+      .catch(err => {
+        console.log('Something went wrong', err);
+      })
+  }
+</script>
