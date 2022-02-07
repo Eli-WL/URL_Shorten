@@ -24,13 +24,21 @@ router.post('/', (req, res) => {
         return res.render('shorten', { shortURL })
       } else {
         tracecode = Cvt10to62(newnumber)
-        return ShortURL.create({
+        shortURL = host + tracecode
+        console.log(shortURL)
+
+        ShortURL.create({
           originalURL: inputURL,
           tracecode: tracecode,
         })
-          .then((shortURL) => res.render('shorten', { shortURL }))
+          // .then((code) => {
+          //   shortURL = code.find((code) => code.tracecode === tracecode)
+          // })
+          // .then((shortURL) => res.render('shorten', { shortURL })) //卡很久原因，因為先return .create導致一直出現原始的資料庫資料，後來改為return render後面為正常
           .catch((error) => console.log(error))
+        return res.render('shorten', { shortURL })
       }
+
     })
 })
 
